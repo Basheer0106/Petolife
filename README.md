@@ -21,7 +21,7 @@ https://your-live-site-link.vercel.app
 Add your repository link here:
 
 ```bash
-https://github.com/yourusername/petolife
+https://github.com/Basheer0106/Petolife
 ```
 
 ---
@@ -215,7 +215,7 @@ petolife/
 ## 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/petolife.git
+git clone https://github.com/Basheer0106/petolife.git
 ```
 
 ---
