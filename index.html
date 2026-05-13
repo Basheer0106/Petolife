@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PetOlife — Unified Pet Identity</title>
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+
+    :root{
+      --bg:#ffffff;
+      --text:#0f172a;
+      --card:rgba(255,255,255,0.65);
+      --border:rgba(255,255,255,0.15);
+      --primary:#7c3aed;
+      --secondary:#3b82f6;
+      --success:#10b981;
+    }
+
+    .dark{
+      --bg:#050816;
+      --text:#f8fafc;
+      --card:rgba(255,255,255,0.06);
+      --border:rgba(255,255,255,0.08);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:"Inter",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      transition:.4s ease;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+      background-size:50px 50px;
+      z-index:-3;
+    }
+
+    /* SCROLL */
+
+    ::-webkit-scrollbar{
+      width:10px;
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background:linear-gradient(to bottom,#7c3aed,#3b82f6);
+      border-radius:20px;
+    }
+
+    /* PROGRESS */
+
+    #progress-bar{
+      position:fixed;
+      top:0;
+      left:0;
+      width:0%;
+      height:4px;
+      background:linear-gradient(to right,#7c3aed,#3b82f6);
+      z-index:99999;
+    }
+
+    /* BLOBS */
+
+    .blob{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(120px);
+      z-index:-2;
+      animation:float 8s infinite ease-in-out;
+    }
+
+    .blob-1{
+      width:400px;
+      height:400px;
+      background:rgba(124,58,237,0.35);
+      top:-100px;
+      left:-100px;
+    }
+
+    .blob-2{
+      width:400px;
+      height:400px;
+      background:rgba(59,130,246,0.30);
+      bottom:-100px;
+      right:-100px;
+    }
+
+    @keyframes float{
+      0%,100%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(20px);
+      }
+    }
+
+    /* GLASS */
+
+    .glass{
+      background:var(--card);
+      border:1px solid var(--border);
+      backdrop-filter:blur(24px);
+    }
+
+    /* NAVBAR */
+
+    .navbar{
+      position:sticky;
+      top:0;
+      width:100%;
+      padding:1rem 6%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      backdrop-filter:blur(20px);
+      background:rgba(255,255,255,0.05);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      z-index:999;
+    }
+
+    .logo{
+      font-size:1.4rem;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:2rem;
+    }
+
+    .nav-links a{
+      text-decoration:none;
+      color:var(--text);
+      opacity:.8;
+      transition:.3s;
+    }
+
+    .nav-links a:hover{
+      color:#8b5cf6;
+      opacity:1;
+    }
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+    }
+
+    .theme-toggle{
+      width:45px;
+      height:45px;
+      border:none;
+      border-radius:50%;
+      cursor:pointer;
+      background:var(--card);
+      color:var(--text);
+      font-size:1rem;
+    }
+
+    /* BUTTONS */
+
+    .primary-btn,
+    .secondary-btn{
+      padding:1rem 1.6rem;
+      border-radius:14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:.3s;
+      font-size:.95rem;
+    }
+
+    .primary-btn{
+      border:none;
+      background:linear-gradient(to right,#7c3aed,#3b82f6);
+      color:white;
+      box-shadow:0 10px 40px rgba(124,58,237,.35);
+    }
+
+    .primary-btn:hover{
+      transform:translateY(-3px);
+    }
+
+    .secondary-btn{
+      border:1px solid rgba(255,255,255,0.15);
+      background:transparent;
+      color:var(--text);
+    }
+
+    .secondary-btn:hover{
+      background:rgba(255,255,255,0.05);
+    }
+
+    /* HERO */
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      align-items:center;
+      gap:4rem;
+      padding:5rem 6%;
+    }
+
+    .tag{
+      display:inline-block;
+      padding:0.6rem 1rem;
+      border-radius:999px;
+      background:rgba(124,58,237,.12);
+      color:#8b5cf6;
+      border:1px solid rgba(124,58,237,.15);
+      margin-bottom:1rem;
+      font-size:.9rem;
+    }
+
+    .hero h1{
+      font-size:5rem;
+      line-height:1;
+      letter-spacing:-3px;
+      margin-bottom:1.5rem;
+    }
+
+    .hero p{
+      line-height:1.9;
+      opacity:.8;
+      font-size:1.05rem;
+      max-width:650px;
+    }
+
+    .hero-buttons{
+      display:flex;
+      gap:1rem;
+      margin-top:2rem;
+      flex-wrap:wrap;
+    }
+
+    .stats{
+      display:flex;
+      gap:1rem;
+      margin-top:3rem;
+      flex-wrap:wrap;
+    }
+
+    .stat-card{
+      padding:1.3rem;
+      min-width:160px;
+      border-radius:22px;
+      transition:.3s;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-6px);
+    }
+
+    .stat-card h3{
+      font-size:1.7rem;
+    }
+
+    /* PET CARD */
+
+    .pet-card{
+      max-width:450px;
+      border-radius:30px;
+      overflow:hidden;
+      margin:auto;
+      animation:floatCard 5s infinite ease-in-out;
+      position:relative;
+    }
+
+    @keyframes floatCard{
+      0%,100%{
+        transform:translateY(0px);
+      }
+      50%{
+        transform:translateY(-15px);
+      }
+    }
+
+    .pet-card img{
+      width:100%;
+      height:320px;
+      object-fit:cover;
+    }
+
+    .pet-content{
+      padding:2rem;
+    }
+
+    .identity-id{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:1rem;
+      font-size:.85rem;
+      opacity:.8;
+    }
+
+    .verified{
+      color:#10b981;
+      font-weight:600;
+    }
+
+    .pet-content h3{
+      font-size:2rem;
+    }
+
+    .pet-content p{
+      opacity:.7;
+      margin-top:5px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:.5rem 1rem;
+      border-radius:999px;
+      margin:1rem 0;
+      font-size:.85rem;
+      background:rgba(16,185,129,.15);
+      color:#10b981;
+    }
+
+    .pet-info{
+      display:flex;
+      justify-content:space-between;
+      margin:1rem 0;
+      opacity:.8;
+      font-size:.9rem;
+    }
+
+    .qr{
+      width:100px;
+      height:100px;
+      border-radius:16px;
+      background:
+      repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 10px,
+        #fff 10px,
+        #fff 20px
+      );
+      animation:scan 3s infinite linear;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .qr::after{
+      content:"";
+      position:absolute;
+      width:100%;
+      height:4px;
+      background:#10b981;
+      top:0;
+      left:0;
+      animation:scanner 2s infinite linear;
+    }
+
+    @keyframes scanner{
+      0%{top:0;}
+      100%{top:100%;}
+    }
+
+    /* SECTION */
+
+    section{
+      padding:7rem 6%;
+    }
+
+    .section-header{
+      text-align:center;
+      margin-bottom:4rem;
+    }
+
+    .section-header h2{
+      font-size:3.5rem;
+      margin-top:1rem;
+      letter-spacing:-2px;
+    }
+
+    .section-header p{
+      max-width:700px;
+      margin:auto;
+      margin-top:1rem;
+      line-height:1.8;
+      opacity:.7;
+    }
+
+    /* GRID */
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:2rem;
+    }
+
+    .card{
+      padding:2rem;
+      border-radius:28px;
+      transition:.4s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      background:rgba(124,58,237,.15);
+      border-radius:50%;
+      top:-80px;
+      right:-80px;
+    }
+
+    .card:hover{
+      transform:translateY(-10px);
+      box-shadow:0 20px 60px rgba(124,58,237,.18);
+    }
+
+    .card i{
+      width:42px;
+      height:42px;
+      color:#8b5cf6;
+      margin-bottom:1rem;
+    }
+
+    .card h3{
+      margin-bottom:1rem;
+      font-size:1.3rem;
+    }
+
+    .card p{
+      opacity:.75;
+      line-height:1.8;
+    }
+
+    /* WORKFLOW */
+
+    .workflow-container{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:1rem;
+      flex-wrap:wrap;
+      margin-top:4rem;
+    }
+
+    .workflow-item{
+      text-align:center;
+    }
+
+    .circle{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background:linear-gradient(to right,#7c3aed,#3b82f6);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin:auto;
+      color:white;
+      font-size:1.5rem;
+      margin-bottom:1rem;
+      box-shadow:0 10px 40px rgba(124,58,237,.4);
+    }
+
+    .line{
+      width:100px;
+      height:3px;
+      background:linear-gradient(to right,#7c3aed,#3b82f6);
+      position:relative;
+      overflow:hidden;
+      border-radius:10px;
+    }
+
+    .line::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      width:40%;
+      background:white;
+      animation:moveLine 2s infinite linear;
+    }
+
+    @keyframes moveLine{
+      from{
+        transform:translateX(-100%);
+      }
+      to{
+        transform:translateX(300%);
+      }
+    }
+
+    /* ARCHITECTURE */
+
+    .architecture{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:2rem;
+      margin-top:4rem;
+    }
+
+    .arch-box{
+      padding:2rem;
+      border-radius:28px;
+      text-align:center;
+    }
+
+    .arch-box i{
+      width:50px;
+      height:50px;
+      margin-bottom:1rem;
+      color:#8b5cf6;
+    }
+
+    /* CTA */
+
+    .cta{
+      text-align:center;
+    }
+
+    .cta h2{
+      font-size:4rem;
+      margin-bottom:2rem;
+    }
+
+    /* FOOTER */
+
+    footer{
+      padding:4rem 6%;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:2rem;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-links{
+      display:flex;
+      gap:2rem;
+      flex-wrap:wrap;
+    }
+
+    .footer-links a{
+      color:var(--text);
+      text-decoration:none;
+      opacity:.7;
+    }
+
+    /* REVEAL */
+
+    .reveal{
+      opacity:0;
+      transform:translateY(60px);
+      transition:all 1s ease;
+    }
+
+    .reveal.active{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* MODAL */
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.65);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+      padding:1rem;
+    }
+
+    .modal-content{
+      width:100%;
+      max-width:500px;
+      padding:2rem;
+      border-radius:30px;
+      position:relative;
+    }
+
+    .close-modal{
+      position:absolute;
+      top:20px;
+      right:20px;
+      cursor:pointer;
+      font-size:1.5rem;
+    }
+
+    .modal-content input{
+      width:100%;
+      padding:1rem;
+      margin-top:1rem;
+      border:none;
+      outline:none;
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+    }
+
+    .modal-content button{
+      width:100%;
+      margin-top:1.5rem;
+    }
+
+    .success-message{
+      display:none;
+      text-align:center;
+      margin-top:2rem;
+      animation:fadeIn .5s ease;
+    }
+
+    .success-message h3{
+      color:#10b981;
+      margin-bottom:1rem;
+    }
+
+    .generated-id{
+      margin-top:1rem;
+      padding:1rem;
+      border-radius:14px;
+      background:rgba(16,185,129,.12);
+      color:#10b981;
+      font-weight:700;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    /* MOBILE */
+
+    @media(max-width:900px){
+
+      .hero h1,
+      .section-header h2,
+      .cta h2{
+        font-size:2.8rem;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+      .workflow-container{
+        flex-direction:column;
+      }
+
+      .line{
+        width:3px;
+        height:80px;
+      }
+
+      .hero{
+        padding-top:3rem;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- PROGRESS -->
+  <div id="progress-bar"></div>
+
+  <!-- BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+
+    <div class="logo">
+      🐾 PetOlife
+    </div>
+
+    <nav class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#workflow">Workflow</a>
+    </nav>
+
+    <div class="nav-actions">
+
+      <button class="theme-toggle" id="theme-toggle">
+        🌙
+      </button>
+
+      <button class="primary-btn register-btn">
+        Register Your Pet
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-left reveal">
+
+      <span class="tag">
+        Unified Pet Identity Protocol
+      </span>
+
+      <h1>
+        One Digital Identity
+        for Every Pet.
+      </h1>
+
+      <p>
+        Secure vaccination records, emergency access,
+        AI-powered insights, and verified veterinarian connectivity —
+        unified in one trusted ecosystem.
+      </p>
+
+      <div class="hero-buttons">
+
+        <button class="primary-btn register-btn">
+          Register Your Pet
+        </button>
+
+        <button class="secondary-btn explore-btn">
+          Explore Platform
+        </button>
+
+      </div>
+
+      <div class="stats">
+
+        <div class="stat-card glass">
+          <h3 class="counter" data-target="50000">0</h3>
+          <span>Registered Pets</span>
+        </div>
+
+        <div class="stat-card glass">
+          <h3 class="counter" data-target="120">0</h3>
+          <span>Vet Clinics</span>
+        </div>
+
+        <div class="stat-card glass">
+          <h3>99.9%</h3>
+          <span>Secure Uptime</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-right reveal">
+
+      <div class="pet-card glass">
+
+        <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1000&auto=format&fit=crop">
+
+        <div class="pet-content">
+
+          <div class="identity-id">
+            <span>PET-ID : PTL-48391</span>
+            <span class="verified">Verified ✓</span>
+          </div>
+
+          <h3>Charlie</h3>
+
+          <p>Golden Retriever</p>
+
+          <div class="badge">
+            Vaccinated & Protected
+          </div>
+
+          <div class="pet-info">
+            <span>Owner Verified</span>
+            <span>Emergency Ready</span>
+          </div>
+
+          <div class="qr"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+
+    <div class="section-header reveal">
+
+      <span class="tag">The Problem</span>
+
+      <h2>
+        Pet healthcare is fragmented.
+      </h2>
+
+      <p>
+        Clinics, vaccination records, and emergency systems operate separately,
+        making trusted pet identity difficult.
+      </p>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="card glass reveal">
+        <i data-lucide="file-warning"></i>
+        <h3>Lost Medical Records</h3>
+        <p>
+          Pet records disappear between clinics and emergencies.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="siren"></i>
+        <h3>No Emergency Access</h3>
+        <p>
+          Critical data isn't instantly accessible during emergencies.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="hospital"></i>
+        <h3>Disconnected Clinics</h3>
+        <p>
+          Veterinarians use isolated systems with no unified identity.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="shield-alert"></i>
+        <h3>Verification Problems</h3>
+        <p>
+          No trusted ownership verification infrastructure exists today.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SOLUTION -->
+  <section id="solution">
+
+    <div class="section-header reveal">
+
+      <span class="tag">The Solution</span>
+
+      <h2>
+        Trusted Unified Pet Identity
+      </h2>
+
+      <p>
+        PetOlife creates a lifelong identity layer connecting pets,
+        owners, veterinarians, and emergency systems globally.
+      </p>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="card glass reveal">
+        <i data-lucide="qr-code"></i>
+        <h3>QR Identity Access</h3>
+        <p>
+          Instantly scan and retrieve verified pet information.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="cloud"></i>
+        <h3>Cloud Medical History</h3>
+        <p>
+          Lifelong secure records accessible anywhere.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="brain-circuit"></i>
+        <h3>AI Health Insights</h3>
+        <p>
+          Smart preventive healthcare recommendations.
+        </p>
+      </div>
+
+      <div class="card glass reveal">
+        <i data-lucide="shield-check"></i>
+        <h3>Trusted Verification</h3>
+        <p>
+          Owner and veterinarian authentication infrastructure.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="architecture">
+
+    <div class="section-header reveal">
+
+      <span class="tag">Infrastructure</span>
+
+      <h2>
+        Scalable Digital Identity Architecture
+      </h2>
+
+      <p>
+        Designed as a future-ready infrastructure layer
+        for pet healthcare ecosystems.
+      </p>
+
+    </div>
+
+    <div class="architecture">
+
+      <div class="arch-box glass reveal">
+        <i data-lucide="user"></i>
+        <h3>Pet Parent</h3>
+        <p>
+          Register pets and manage identity securely.
+        </p>
+      </div>
+
+      <div class="arch-box glass reveal">
+        <i data-lucide="database"></i>
+        <h3>Identity Layer</h3>
+        <p>
+          Unified cloud infrastructure for lifelong records.
+        </p>
+      </div>
+
+      <div class="arch-box glass reveal">
+        <i data-lucide="hospital"></i>
+        <h3>Veterinary APIs</h3>
+        <p>
+          Connected clinic systems and emergency access.
+        </p>
+      </div>
+
+      <div class="arch-box glass reveal">
+        <i data-lucide="shield"></i>
+        <h3>Secure Access</h3>
+        <p>
+          Encryption, verification, and protected ownership.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- WORKFLOW -->
+  <section id="workflow">
+
+    <div class="section-header reveal">
+
+      <span class="tag">Workflow</span>
+
+      <h2>
+        Connected Pet Ecosystem
+      </h2>
+
+    </div>
+
+    <div class="workflow-container">
+
+      <div class="workflow-item reveal">
+        <div class="circle">1</div>
+        <h3>Pet Parent</h3>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="workflow-item reveal">
+        <div class="circle">2</div>
+        <h3>Identity Creation</h3>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="workflow-item reveal">
+        <div class="circle">3</div>
+        <h3>Veterinarian Access</h3>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="workflow-item reveal">
+        <div class="circle">4</div>
+        <h3>Lifetime Care</h3>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="cta reveal">
+
+    <h2>
+      Start Your Pet’s Digital Journey Today.
+    </h2>
+
+    <div class="hero-buttons" style="justify-content:center;">
+
+      <button class="primary-btn register-btn">
+        Register Your Pet
+      </button>
+
+      <button class="secondary-btn explore-btn">
+        Explore Platform
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div>
+      <h3>🐾 PetOlife</h3>
+
+      <p style="margin-top:10px;opacity:.7;">
+        Unified Pet Identity Infrastructure
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+      <a href="#">Twitter</a>
+    </div>
+
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+
+    <div class="modal-content glass">
+
+      <span class="close-modal" id="close-modal">
+        ✕
+      </span>
+
+      <div id="form-content">
+
+        <h2>
+          Register Your Pet 🐾
+        </h2>
+
+        <p style="opacity:.7;margin-top:1rem;">
+          Create your pet’s trusted digital identity.
+        </p>
+
+        <input type="text" id="pet-name" placeholder="Pet Name">
+
+        <input type="text" placeholder="Breed">
+
+        <input type="email" placeholder="Owner Email">
+
+        <button class="primary-btn" id="submit-btn">
+          Generate Pet Identity
+        </button>
+
+      </div>
+
+      <div class="success-message" id="success-message">
+
+        <h3>
+          Identity Created Successfully ✓
+        </h3>
+
+        <p>
+          Your pet has been added to the PetOlife identity network.
+        </p>
+
+        <div class="generated-id" id="generated-id">
+          PET-ID : PTL-48291
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // ICONS
+
+    lucide.createIcons();
+
+    // REVEAL
+
+    const reveals = document.querySelectorAll(".reveal");
+
+    function revealElements(){
+
+      reveals.forEach((el)=>{
+
+        const top = el.getBoundingClientRect().top;
+
+        if(top < window.innerHeight - 100){
+          el.classList.add("active");
+        }
+
+      });
+
+    }
+
+    window.addEventListener("scroll",revealElements);
+
+    revealElements();
+
+    // PROGRESS BAR
+
+    const progressBar = document.getElementById("progress-bar");
+
+    window.addEventListener("scroll",()=>{
+
+      const scroll =
+      (window.scrollY /
+      (document.body.scrollHeight - window.innerHeight)) * 100;
+
+      progressBar.style.width = scroll + "%";
+
+    });
+
+    // DARK MODE
+
+    const themeToggle = document.getElementById("theme-toggle");
+
+    themeToggle.addEventListener("click",()=>{
+
+      document.documentElement.classList.toggle("dark");
+
+      if(document.documentElement.classList.contains("dark")){
+        themeToggle.innerHTML = "🌙";
+      }else{
+        themeToggle.innerHTML = "☀️";
+      }
+
+    });
+
+    // MODAL
+
+    const modal = document.getElementById("modal");
+
+    const registerButtons =
+    document.querySelectorAll(".register-btn");
+
+    const closeModal =
+    document.getElementById("close-modal");
+
+    registerButtons.forEach((btn)=>{
+
+      btn.addEventListener("click",()=>{
+
+        modal.style.display = "flex";
+
+      });
+
+    });
+
+    closeModal.addEventListener("click",()=>{
+
+      modal.style.display = "none";
+
+    });
+
+    window.addEventListener("click",(e)=>{
+
+      if(e.target === modal){
+        modal.style.display = "none";
+      }
+
+    });
+
+    // EXPLORE BUTTON
+
+    const exploreButtons =
+    document.querySelectorAll(".explore-btn");
+
+    exploreButtons.forEach((btn)=>{
+
+      btn.addEventListener("click",()=>{
+
+        document
+        .querySelector("#solution")
+        .scrollIntoView({
+          behavior:"smooth"
+        });
+
+      });
+
+    });
+
+    // COUNTERS
+
+    const counters = document.querySelectorAll(".counter");
+
+    counters.forEach(counter=>{
+
+      const updateCounter = ()=>{
+
+        const target = +counter.getAttribute("data-target");
+
+        const current = +counter.innerText;
+
+        const increment = target / 100;
+
+        if(current < target){
+
+          counter.innerText =
+          `${Math.ceil(current + increment)}`;
+
+          setTimeout(updateCounter,20);
+
+        }else{
+
+          counter.innerText =
+          target >= 1000
+          ? `${Math.floor(target/1000)}K+`
+          : `${target}+`;
+
+        }
+
+      };
+
+      updateCounter();
+
+    });
+
+    // SUBMIT
+
+    document
+    .getElementById("submit-btn")
+    .addEventListener("click",()=>{
+
+      const petName =
+      document.getElementById("pet-name").value;
+
+      const randomId =
+      "PTL-" + Math.floor(Math.random()*99999);
+
+      document
+      .getElementById("generated-id")
+      .innerText =
+      `PET-ID : ${randomId}`;
+
+      document
+      .getElementById("form-content")
+      .style.display = "none";
+
+      document
+      .getElementById("success-message")
+      .style.display = "block";
+
+    });
+
+  </script>
+
+</body>
+</html>
